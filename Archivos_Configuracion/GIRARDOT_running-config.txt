@@ -1,0 +1,138 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname GIRARDOT
+!
+!
+!
+enable secret 5 $1$mERr$efFnqYcUZcsvzrHnVFHHJ/
+enable password 7 08701E1D5D4C53404A
+!
+!
+ip dhcp excluded-address 10.3.128.1 10.3.128.10
+ip dhcp excluded-address 10.3.160.1 10.3.160.10
+!
+ip dhcp pool girardot-administradores
+ network 10.3.128.0 255.255.224.0
+ default-router 10.3.128.1
+ dns-server 200.20.30.4
+ domain-name ucundinamarca.edu.co
+ip dhcp pool usuarios-girardot
+ network 10.3.160.0 255.255.240.0
+ default-router 10.3.160.1
+ dns-server 200.20.30.4
+ domain-name ucundinamarca.edu.co
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ftp username sebas
+ip ftp password 123456
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.3.128.1 255.255.224.0
+!
+interface FastEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 10.3.160.1 255.255.240.0
+!
+interface FastEthernet1/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial2/0
+ description Enlace-Girardot-Bogota
+ ip address 37.0.0.1 255.255.255.252
+!
+interface Serial3/0
+ description Enlace-Girardot-Pereira
+ ip address 37.0.0.5 255.255.255.252
+!
+interface GigabitEthernet4/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet5/0
+ no ip address
+ duplex auto
+ speed auto
+!
+router rip
+ version 2
+ network 10.0.0.0
+ network 37.0.0.0
+!
+ip classless
+ip route 10.0.0.0 255.255.0.0 Serial2/0 130
+ip route 10.3.192.0 255.255.255.128 Serial2/0 130
+ip route 10.2.128.0 255.255.128.0 Serial3/0 130
+ip route 10.3.64.0 255.255.192.0 Serial3/0 130
+ip route 10.3.192.128 255.255.255.192 Serial3/0 130
+ip route 10.2.0.0 255.255.128.0 Serial2/0 130
+ip route 172.1.1.0 255.255.255.252 Serial2/0 130
+ip route 37.0.0.8 255.255.255.252 Serial2/0 130
+ip route 200.21.30.0 255.255.255.0 Serial2/0 130
+ip route 200.20.30.0 255.255.255.0 Serial2/0 130
+!
+ip flow-export version 9
+!
+!
+!
+banner motd #
+***Bienvenido a la Sede de Girardot***
+#
+!
+!
+!
+!
+!
+line con 0
+ history size 200
+ exec-timeout 5 0
+ password 7 08701E1D5D4C
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ exec-timeout 5 0
+ password 7 082241540B0A
+ login
+ history size 200
+!
+!
+!
+end
+

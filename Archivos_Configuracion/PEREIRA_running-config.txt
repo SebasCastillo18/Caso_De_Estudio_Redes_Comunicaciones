@@ -1,0 +1,148 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname PEREIRA
+!
+!
+!
+enable secret 5 $1$mERr$efFnqYcUZcsvzrHnVFHHJ/
+enable password 7 08701E1D5D4C53404A
+!
+!
+ip dhcp excluded-address 10.3.64.1 10.3.64.10
+ip dhcp excluded-address 10.2.128.1 10.2.128.10
+ip dhcp excluded-address 10.3.192.129 10.3.192.138
+!
+ip dhcp pool usuarios-pereira
+ network 10.3.64.0 255.255.192.0
+ default-router 10.3.64.1
+ dns-server 200.20.30.4
+ domain-name ucundinamarca.edu.co
+ip dhcp pool admin-pereira
+ network 10.2.128.0 255.255.128.0
+ default-router 10.2.128.1
+ dns-server 200.20.30.4
+ domain-name ucundinamarca.edu.co
+ip dhcp pool servers-pereira
+ network 10.3.192.128 255.255.255.192
+ default-router 10.3.192.129
+ dns-server 200.20.30.4
+ domain-name ucundinamarca.edu.co
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ftp username zamir
+ip ftp password 12345
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.2.128.1 255.255.128.0
+!
+interface FastEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 10.3.64.1 255.255.192.0
+!
+interface FastEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 10.3.192.129 255.255.255.192
+!
+interface FastEthernet1/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial2/0
+ description Enlace-Pereira-Bogota
+ ip address 37.0.0.9 255.255.255.252
+!
+interface Serial3/0
+ description Enlace-Pereira-Girardot
+ ip address 37.0.0.6 255.255.255.252
+ clock rate 64000
+!
+interface GigabitEthernet4/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet5/0
+ no ip address
+ duplex auto
+ speed auto
+!
+router rip
+ version 2
+ network 10.0.0.0
+ network 37.0.0.0
+ no auto-summary
+!
+ip classless
+ip route 10.0.0.0 255.255.0.0 Serial2/0 130
+ip route 10.2.0.0 255.255.128.0 Serial2/0 130
+ip route 10.3.192.0 255.255.255.128 Serial2/0 130
+ip route 10.3.128.0 255.255.224.0 Serial3/0 130
+ip route 10.3.160.0 255.255.240.0 Serial3/0 130
+ip route 37.0.0.0 255.255.255.252 Serial2/0 130
+ip route 172.1.1.0 255.255.255.252 Serial2/0 130
+ip route 200.20.30.0 255.255.255.0 Serial2/0 130
+ip route 200.21.30.0 255.255.255.0 Serial2/0 130
+!
+ip flow-export version 9
+!
+!
+!
+banner motd #
+*** Bienvenido a la Sede de Pereira***
+#
+!
+!
+!
+!
+!
+line con 0
+ history size 200
+ exec-timeout 5 0
+ password 7 08701E1D5D4C
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ exec-timeout 5 0
+ password 7 082241540B0A
+ login
+!
+!
+!
+end
+

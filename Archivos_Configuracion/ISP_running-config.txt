@@ -1,0 +1,119 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname ISP
+!
+!
+!
+enable secret 5 $1$mERr$efFnqYcUZcsvzrHnVFHHJ/
+enable password 7 08701E1D5D4C53404A
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet1/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial2/0
+ description Enlace-ISP-Bogota
+ ip address 172.1.1.1 255.255.255.252
+!
+interface Serial3/0
+ description Enlace-ISP-Internet
+ ip address 200.21.30.1 255.255.255.0
+ encapsulation frame-relay
+!
+interface FastEthernet4/0
+ no ip address
+ shutdown
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+!
+router rip
+ version 2
+ network 172.1.0.0
+ network 200.21.30.0
+ no auto-summary
+!
+ip classless
+ip route 37.0.0.0 255.255.255.252 Serial2/0 130
+ip route 37.0.0.4 255.255.255.252 Serial2/0 130
+ip route 37.0.0.8 255.255.255.252 Serial2/0 130
+ip route 10.0.0.0 255.255.0.0 Serial2/0 130
+ip route 10.2.0.0 255.255.128.0 Serial2/0 130
+ip route 10.3.192.0 255.255.255.128 Serial2/0 130
+ip route 10.3.128.0 255.255.224.0 Serial2/0 130
+ip route 10.3.160.0 255.255.240.0 Serial2/0 130
+ip route 10.2.128.0 255.255.128.0 Serial2/0 130
+ip route 10.3.64.0 255.255.192.0 Serial2/0 130
+ip route 10.3.192.128 255.255.255.192 Serial2/0 130
+ip route 200.21.30.0 255.255.255.0 Serial3/0 130
+ip route 200.20.30.0 255.255.255.0 Serial3/0 130
+!
+ip flow-export version 9
+!
+!
+!
+banner motd #
+*** Bienvenido al Proveedor de Servicios de Internet***
+#
+!
+!
+!
+!
+!
+line con 0
+ history size 200
+ exec-timeout 5 0
+ password 7 08701E1D5D4C
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ exec-timeout 5 0
+ password 7 082241540B0A
+ login
+!
+!
+!
+end
+
